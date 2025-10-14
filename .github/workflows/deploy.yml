@@ -8,7 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      # baked envs; Azure also has these as App Settings
       NEXT_PUBLIC_API_URL: https://menn-api-aidarous.azurewebsites.net
       NEXT_TELEMETRY_DISABLED: "1"
       NODE_ENV: production
@@ -20,21 +19,20 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      # Install INCLUDING devDependencies (keeps ESLint/Next tooling happy during build)
+      # Install INCLUDING devDependencies so Next can build
       - run: npm ci --omit=dev=false
 
-      # Build the standard .next bundle
+      # Build the standalone output
       - run: npm run build
 
-      # Package the runtime payload for App Service (non-standalone)
+      # Package the standalone payload (includes server.js + minimal node_modules)
       - run: |
           rm -rf deploy
-          mkdir -p deploy
-          cp -r .next deploy/.next
+          mkdir -p deploy/.next/static
+          cp -r .next/standalone/* deploy/
+          cp -r .next/static/* deploy/.next/static/
           [ -d public ] && cp -r public deploy/public || true
-          cp package.json package-lock.json deploy/
-          node -e "let p=require('./package.json'); p.scripts=p.scripts||{}; p.scripts.start='next start -p 3000'; require('fs').writeFileSync('deploy/package.json', JSON.stringify(p,null,2))"
-          cd deploy && zip -r ../store.zip . -x '.git/*' '.github/*' 'node_modules/*'
+          cd deploy && zip -r ../store.zip . -x '.git/*' '.github/*'
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
