@@ -8,9 +8,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_API_URL: https://menn-api-aidarous.azurewebsites.net
+      # make sure devDependencies are installed during CI
+      NPM_CONFIG_PRODUCTION: "false"
       NEXT_TELEMETRY_DISABLED: "1"
-      NODE_ENV: production
+      # bake the public API URL into the client bundle
+      NEXT_PUBLIC_API_URL: https://menn-api-aidarous.azurewebsites.net
     steps:
       - uses: actions/checkout@v4
 
@@ -19,10 +21,13 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - run: npm ci
+      # install INCLUDING devDependencies
+      - run: npm ci --omit=dev=false
+
+      # build (requires next.config.mjs to have: export default { output: 'standalone' })
       - run: npm run build
 
-      # Package the standalone output
+      # package Next.js standalone output for Azure App Service
       - run: |
           rm -rf deploy
           mkdir -p deploy/.next/static
@@ -34,16 +39,14 @@ jobs:
           {
             "name": "menn-store-frontend",
             "private": true,
-            "scripts": {
-              "start": "node server.js"
-            }
+            "scripts": { "start": "node server.js" }
           }
           JSON
-          cd deploy && zip -r ../store.zip . -x ".git/*" ".github/*"
+          (cd deploy && zip -r ../site.zip . -x ".git/*" ".github/*")
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: menn-store-aidarous
-          package: store.zip
+          package: site.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
