@@ -1,0 +1,49 @@
+name: Build & Deploy Store (Next.js → Azure App Service)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_API_URL: https://menn-api-aidarous.azurewebsites.net
+      NEXT_TELEMETRY_DISABLED: "1"
+      NODE_ENV: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+      - run: npm run build
+
+      # Package the standalone output
+      - run: |
+          rm -rf deploy
+          mkdir -p deploy/.next/static
+          cp -r .next/standalone/* deploy/
+          cp -r .next/static/* deploy/.next/static/
+          [ -d public ] && cp -r public deploy/public || true
+          # minimal package.json so App Service can run "npm start"
+          cat > deploy/package.json <<'JSON'
+          {
+            "name": "menn-store-frontend",
+            "private": true,
+            "scripts": {
+              "start": "node server.js"
+            }
+          }
+          JSON
+          cd deploy && zip -r ../store.zip . -x ".git/*" ".github/*"
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: menn-store-aidarous
+          package: store.zip
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
