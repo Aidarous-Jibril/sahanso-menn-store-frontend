@@ -69,9 +69,9 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-bold mb-4">Contact Us</h3>
           <ul className="space-y-2 text-sm">
-            <li className="flex items-center"><FaPhoneAlt className="mr-2" /> +1 555-123-4567</li>
+            <li className="flex items-center"><FaPhoneAlt className="mr-2" /> +46 720 040 449</li>
             <li className="flex items-center"><FaEnvelope className="mr-2" /> info@sahanso.com</li>
-            <li className="flex items-center"><FaMapMarkerAlt className="mr-2" /> Kingston, NY 12401</li>
+            <li className="flex items-center"><FaMapMarkerAlt className="mr-2" /> Kvarnhagsgatan, Hässelby 12401</li>
             <li className="flex items-center"><FaWhatsapp className="mr-2" /> Support Ticket</li>
           </ul>
         </div>

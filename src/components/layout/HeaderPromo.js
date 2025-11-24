@@ -43,7 +43,7 @@ const HeaderPromo = () => {
     <div className="flex flex-wrap justify-between items-center px-4 sm:px-16 py-2 border-b border-gray-200 bg-white">
       <div className="flex items-center mb-2 sm:mb-0">
         <i className="fas fa-phone-alt"></i>
-        <span className="ml-2">+1 555-123-4567</span>
+        <span className="ml-2">+46 720 040 449</span>
       </div>
 
       <div className="flex items-center space-x-4">

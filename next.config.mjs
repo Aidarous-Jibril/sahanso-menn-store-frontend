@@ -22,8 +22,10 @@
 // };
 // export default nextConfig;
 
+//frontend/next.config.mjs
 /** @type {import('next').NextConfig} */
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://api:8000";
 
 export default {
   output: 'standalone',
