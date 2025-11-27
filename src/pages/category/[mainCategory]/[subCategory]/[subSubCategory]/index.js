@@ -25,7 +25,7 @@ const SubSubCategoryPage = ({ categories, products, mainCategory, subCategory, s
       <div className="min-h-screen flex flex-col">
       <HeaderPromo />
         <Header categories={categories} />
-        <div className="flex-grow py-8 container mx-auto px-4 sm:pb-20 md:pb-28">
+        <div className="flex-grow py-8 container mx-auto px-0 sm:px-4 sm:pb-20 md:pb-28">
           {/* Breadcrumbs */}
           <Breadcrumbs
             items={[
@@ -36,12 +36,12 @@ const SubSubCategoryPage = ({ categories, products, mainCategory, subCategory, s
           />
 
           <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            {capitalizeWords(subSubCategory || "Unknown Sub-Subcategory")}
+            {/* {capitalizeWords(subSubCategory || "Unknown Sub-Subcategory")} */}
           </h1>
           <div className="container mx-auto px-4 flex justify-end"> <SortSelect value={sort || "newest"} /> </div>
 
           {products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}

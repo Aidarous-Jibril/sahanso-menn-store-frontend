@@ -40,7 +40,7 @@ const SubCategoryPage = ({ categories, subSubcategories }) => {
           />
 
           <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            {subCategory ? capitalizeWords(subCategory) : "Unknown Sub-Subcategory"}
+            {/* {subCategory ? capitalizeWords(subCategory) : "Unknown Sub-Subcategory"} */}
           </h1>
 
           {subSubcategories?.length > 0 ? (

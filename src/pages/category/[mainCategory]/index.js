@@ -37,7 +37,7 @@ const CategoryPage = ({ categories, subcategories }) => {
           <Breadcrumbs items={[{ label: mainCategory }]} />
 
           <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            {capitalizeWords(mainCategory || "Unknown Category")}
+            {/* {capitalizeWords(mainCategory || "Unknown Category")} */}
           </h1>
 
           {subcategories?.length > 0 ? (
